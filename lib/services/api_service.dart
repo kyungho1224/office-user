@@ -21,13 +21,13 @@ class ApiService {
 
   // static String base_url = "https://officeback.site";
   static const String login_url = "public-api/sign-in/user";
-  static const String tenant_list = "public-api/tenants";
+  // static const String tenant_list = "public-api/tenants";
   static const String join_url = "public-api/sign-up/user";
   static const String my_info_url = "app/members/info";
   static const String contract_list = "app/contracts";
-  static const String score_list = "app/scores";
+  // static const String score_list = "app/scores";
   static const String member_list = "app/members/all";
-  static const String submit_score = "api/scores";
+  // static const String submit_score = "api/scores";
   static const String alarm_list = "app/alarms";
   static const String complaint_url = "app/complaints";
 
@@ -101,20 +101,20 @@ class ApiService {
     return list.map((alarm) => Alarm.fromJson(alarm)).toList();
   }
 
-  static Future<bool> sendScore(int id, int score, String comment) async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$submit_score/$id");
-    print("url: $url");
-    final response = await patch(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: json.encode({'score': score, 'comment': comment}),
-    );
-    return response.statusCode == 200;
-  }
+  // static Future<bool> sendScore(int id, int score, String comment) async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$submit_score/$id");
+  //   print("url: $url");
+  //   final response = await patch(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //     body: json.encode({'score': score, 'comment': comment}),
+  //   );
+  //   return response.statusCode == 200;
+  // }
 
   static Future<List<AuthMember>> getMemberList() async {
     final token = await storage.read(key: 'token');
@@ -130,20 +130,20 @@ class ApiService {
     return list.map((member) => AuthMember.fromJson(member)).toList();
   }
 
-  static Future<List<Score>> getScoreList() async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$score_list");
-    final response = await get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    List<dynamic> list = json.decode(utf8.decode(response.bodyBytes));
-    // print(list);
-    return list.map((score) => Score.fromJson(score)).toList();
-  }
+  // static Future<List<Score>> getScoreList() async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$score_list");
+  //   final response = await get(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   List<dynamic> list = json.decode(utf8.decode(response.bodyBytes));
+  //   // print(list);
+  //   return list.map((score) => Score.fromJson(score)).toList();
+  // }
 
   static Future<ContractList> getContractList() async {
     final token = await storage.read(key: 'token');

@@ -1,4 +1,8 @@
+import 'dart:ffi';
+
 import 'package:dio/dio.dart';
+import 'package:office_user/models/score_model.dart';
+import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../models/tenant_model.dart';
@@ -11,4 +15,16 @@ abstract class RetrofitService {
 
   @GET("/public-api/tenants")
   Future<TenantList> getTenantList();
+
+  @GET("/app/scores")
+  Future<List<Score>> getScoreList(
+    @Header("Authorization") String token,
+  );
+
+  @PATCH("/api/scores/{id}")
+  Future<ScoreResult> updateScore(
+    @Header("Authorization") String token,
+    @Path("id") int id,
+    @Body() Map<String, dynamic> updateScoreRequest,
+  );
 }

@@ -13,6 +13,14 @@ RatingType typeFromString(String type) {
   }
 }
 
+class ScoreResult {
+  final int id;
+
+  ScoreResult({required this.id});
+
+  ScoreResult.fromJson(Map<String, dynamic> json) : id = json['id'];
+}
+
 class Score {
   final int id;
   int score;
@@ -29,7 +37,7 @@ class Score {
         updatedAt = DateTime.parse(json['updated_at']);
 
   bool isCompleted() {
-    return score > 0 && createdAt.isBefore(updatedAt);
+    return score > -1 && createdAt.isBefore(updatedAt);
   }
 
   void updateScore(int score, String comment) {

@@ -8,7 +8,7 @@ class TenantProvider with ChangeNotifier {
     _fetchTenants();
   }
 
-  final RetrofitService _retrofitClient = RetrofitService(Dio());
+  final RetrofitService _retrofitService = RetrofitService(Dio());
 
   TenantList _tenantList = TenantList(count: 0, tenantList: []);
   bool _isLoading = false;
@@ -21,7 +21,7 @@ class TenantProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    _tenantList = await _retrofitClient.getTenantList();
+    _tenantList = await _retrofitService.getTenantList();
 
     _isLoading = false;
     notifyListeners();

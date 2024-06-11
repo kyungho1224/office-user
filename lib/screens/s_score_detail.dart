@@ -22,8 +22,7 @@ class _ScoreDetailScreenState extends State<ScoreDetailScreen> {
   }
 
   Future<void> _submitScoreAndComment(int id, int score, String comment) async {
-    await Provider.of<ScoreProvider>(context, listen: false)
-        .submitScore(id, score, comment);
+    await Provider.of<ScoreProvider>(context, listen: false).submitScore(id, score, comment);
     if (!mounted) return;
     await Provider.of<ScoreProvider>(context, listen: false).fetchScores();
     if (mounted) {
