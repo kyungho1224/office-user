@@ -191,16 +191,6 @@ class ApiService {
     return MemberLoginResponse.of(response.statusCode, response.body, null);
   }
 
-  static Future<TenantsResponse> getTenantsResponse() async {
-    Uri url = Uri.parse("$base_url/$tenant_list");
-    final response = await get(url);
-    if (response.statusCode == 200) {
-      return TenantsResponse.of(response.statusCode, "success",
-          json.decode(utf8.decode(response.bodyBytes)));
-    }
-    return TenantsResponse.of(response.statusCode, response.body, null);
-  }
-
   static Future<MemberRegisterResponse> getMemberJoinResponse(
       String email, String password, String phoneNumber, int tenantId) async {
     Uri url = Uri.parse("$base_url/$join_url");

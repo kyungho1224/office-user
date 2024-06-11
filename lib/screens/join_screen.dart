@@ -1,10 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:office_user/models/member_model.dart';
 import 'package:office_user/models/tenant_model.dart';
+import 'package:office_user/providers/tenant_provider.dart';
 import 'package:office_user/services/api_service.dart';
 import 'package:office_user/widgets/custom_alert_dialog.dart';
+import 'package:provider/provider.dart';
 
 class JoinScreen extends StatefulWidget {
   JoinScreen({super.key});
@@ -19,7 +19,6 @@ class _JoinScreenState extends State<JoinScreen> {
   String _password = "";
   String _phone = "";
   Tenant? _selectedTenant;
-  bool _isLoading = false;
   late MemberRegisterResponse memberJoinResponse;
 
   void _join() async {
@@ -33,11 +32,8 @@ class _JoinScreenState extends State<JoinScreen> {
         );
         return;
       }
-      setState(() {
-        _isLoading = true;
-      });
       memberJoinResponse = await ApiService.getMemberJoinResponse(
-          _email, _password, _phone, _selectedTenant!.id);
+          _email, _password, _phone, _selectedTenant!.id!);
       if (memberJoinResponse.code == 200) {
         print("success");
         print("role: ${memberJoinResponse.memberRegister!.role}");
@@ -81,7 +77,7 @@ class _JoinScreenState extends State<JoinScreen> {
           ),
         ),
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(40),
+          padding: const EdgeInsets.all(40),
           child: Center(
             child: Form(
               key: _formKey,
@@ -183,45 +179,48 @@ class TenantDropdown extends StatefulWidget {
 }
 
 class _TenantDropdownState extends State<TenantDropdown> {
-  Future<TenantsResponse> tenantList = ApiService.getTenantsResponse();
   Tenant? selectedTenant;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<TenantsResponse>(
-      future: tenantList,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return const Text('오류가 발생했습니다.');
-        } else if (!snapshot.hasData ||
-            snapshot.data!.tenantList!.tenantList.isEmpty) {
-          return const Text('입주사 목록이 없습니다.');
-        } else {
-          return DropdownButton<Tenant>(
-            isExpanded: true,
-            value: selectedTenant,
-            items: snapshot.data!.tenantList!.tenantList.map((Tenant item) {
-              return DropdownMenuItem<Tenant>(
-                value: item,
-                child: Text(
-                  '${item.name} (${item.companyNumber})',
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              );
-            }).toList(),
-            onChanged: (Tenant? value) {
-              setState(() {
-                selectedTenant = value;
-              });
-              widget.onTenantSelected(value!);
-            },
-            hint: const Text('입주사를 선택하세요'),
+    return Consumer<TenantProvider>(
+      builder: (context, tenantProvider, child) {
+        if (tenantProvider.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (tenantProvider.tenantList.tenantList.isEmpty) {
+          return const Center(
+            child: Text('등록된 입주사가 없습니다'),
           );
         }
+        return DropdownButton<Tenant>(
+          isExpanded: true,
+          value: selectedTenant,
+          items: tenantProvider.tenantList.tenantList.map((Tenant item) {
+            return DropdownMenuItem<Tenant>(
+              value: item,
+              child: Text(
+                '${item.name} (${item.companyNumber})',
+                style: const TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: (Tenant? value) {
+            setState(() {
+              selectedTenant = value;
+            });
+            widget.onTenantSelected(value!);
+          },
+          hint: const Text('입주사를 선택하세요'),
+        );
       },
     );
   }

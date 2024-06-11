@@ -24,12 +24,3 @@ class TenantList {
     return TenantList(count: json['count'], tenantList: tenantList);
   }
 }
-
-class TenantsResponse {
-  final int code;
-  final String message;
-  final TenantList? tenantList;
-
-  TenantsResponse.of(this.code, this.message, Map<String, dynamic>? json)
-      : tenantList = json != null ? TenantList.fromJson(json) : null;
-}
