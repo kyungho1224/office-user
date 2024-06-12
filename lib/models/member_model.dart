@@ -7,14 +7,14 @@ class Member {
         token = json['token'];
 }
 
-class MemberLoginResponse {
-  final int code;
-  final String message;
-  final Member? member;
-
-  MemberLoginResponse.of(this.code, this.message, Map<String, dynamic>? json)
-      : member = json != null ? Member.fromJson(json) : null;
-}
+// class MemberLoginResponse {
+//   final int code;
+//   final String message;
+//   final Member? member;
+//
+//   MemberLoginResponse.of(this.code, this.message, Map<String, dynamic>? json)
+//       : member = json != null ? Member.fromJson(json) : null;
+// }
 
 class MemberRegister {
   final int id;

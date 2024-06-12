@@ -7,6 +7,7 @@ import 'package:retrofit/retrofit.dart';
 
 import '../models/auth_member_model.dart';
 import '../models/contract_model.dart';
+import '../models/member_model.dart';
 import '../models/tenant_model.dart';
 
 part 'retrofit_service.g.dart';
@@ -72,4 +73,7 @@ abstract class RetrofitService {
   Future<List<Complaint>> getComplaintList(
     @Header("Authorization") String token,
   );
+
+  @POST("/public-api/sign-in/user")
+  Future<Member> loginMember(@Body() Map<String, dynamic> loginRequest);
 }

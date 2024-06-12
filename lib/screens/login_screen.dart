@@ -1,10 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:office_user/models/member_model.dart';
 import 'package:office_user/screens/join_screen.dart';
 import 'package:office_user/screens/nav_screen.dart';
-import 'package:office_user/services/api_service.dart';
 import 'package:office_user/widgets/custom_alert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../network/retrofit_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -18,8 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
   String _email = "";
   String _password = "";
   bool _isLoading = false;
-  late MemberLoginResponse member;
+
+  // late MemberLoginResponse member;
   late SharedPreferences prefs;
+  late Member member;
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
@@ -39,33 +44,26 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        final member = await ApiService.getMemberLoginResponse(_email, _password);
+        const storage = FlutterSecureStorage();
+        final RetrofitService _retrofitService = RetrofitService(Dio());
+
+        final body = <String, dynamic>{'email': _email, 'password': _password};
+        member = await _retrofitService.loginMember(body);
+
         setState(() {
           _isLoading = false;
         });
-        if (member.message == 'success') {
-          await prefs.setString('email', _email);
-          await prefs.setString('password', _password);
-          await prefs.setString('token', member.member!.token);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NavScreen(),
-            ),
-          );
-        } else {
-          showCustomDialog(
-            context: context,
-            title: "로그인 실패",
-            content: "아이디와 비밀번호를 확인하세요",
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("확인"))
-            ],
-          );
-        }
-      } catch (e) {
+        await prefs.setString('email', _email);
+        await prefs.setString('password', _password);
+        await prefs.setString('token', member.token);
+        await storage.write(key: 'token', value: member.token);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const NavScreen(),
+          ),
+        );
+      } on DioException catch (e) {
         setState(() {
           _isLoading = false;
         });

@@ -14,7 +14,7 @@ class ApiService {
       Platform.isIOS ? "http://localhost:8080" : "http://10.0.2.2:8080";
 
   // static String base_url = "https://officeback.site";
-  static const String login_url = "public-api/sign-in/user";
+  // static const String login_url = "public-api/sign-in/user";
 
   // static const String tenant_list = "public-api/tenants";
   static const String join_url = "public-api/sign-up/user";
@@ -167,25 +167,25 @@ class ApiService {
   //   return AuthMember.fromJson(json.decode(utf8.decode(response.bodyBytes)));
   // }
 
-  static Future<MemberLoginResponse> getMemberLoginResponse(
-      String email, String password) async {
-    Uri url = Uri.parse("$base_url/$login_url");
-    print("login url : ${url}");
-    final response = await post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'email': email, 'password': password}),
-    );
-    if (response.statusCode == 200) {
-      var memberLoginResponse = MemberLoginResponse.of(
-          response.statusCode, "success", json.decode(response.body));
-
-      String token = memberLoginResponse.member!.token;
-      await storage.write(key: 'token', value: token);
-      return memberLoginResponse;
-    }
-    return MemberLoginResponse.of(response.statusCode, response.body, null);
-  }
+  // static Future<MemberLoginResponse> getMemberLoginResponse(
+  //     String email, String password) async {
+  //   Uri url = Uri.parse("$base_url/$login_url");
+  //   print("login url : ${url}");
+  //   final response = await post(
+  //     url,
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: json.encode({'email': email, 'password': password}),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var memberLoginResponse = MemberLoginResponse.of(
+  //         response.statusCode, "success", json.decode(response.body));
+  //
+  //     String token = memberLoginResponse.member!.token;
+  //     await storage.write(key: 'token', value: token);
+  //     return memberLoginResponse;
+  //   }
+  //   return MemberLoginResponse.of(response.statusCode, response.body, null);
+  // }
 
   static Future<MemberRegisterResponse> getMemberJoinResponse(
       String email, String password, String phoneNumber, int tenantId) async {
