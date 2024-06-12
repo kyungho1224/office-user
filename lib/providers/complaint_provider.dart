@@ -1,33 +1,50 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:office_user/services/api_service.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../models/complaint_model.dart';
+import '../network/retrofit_service.dart';
 
 class ComplaintProvider with ChangeNotifier {
+  static const storage = FlutterSecureStorage();
+  final RetrofitService _retrofitService = RetrofitService(Dio());
 
   List<Complaint> _complaintList = [];
   bool _isLoading = false;
 
   List<Complaint> get complaintList => _complaintList;
+
   bool get isLoading => _isLoading;
 
-  void setLoading(bool loading) {
-    _isLoading = loading;
-  }
-
   Future<List<Complaint>> fetchComplaints() async {
-    setLoading(true);
-    _complaintList = await ApiService.getComplaintList();
-    setLoading(false);
+    final token = await storage.read(key: 'token');
+    _isLoading = true;
+    _complaintList = await _retrofitService.getComplaintList('Bearer $token');
+    _isLoading = false;
     notifyListeners();
     return _complaintList;
   }
 
   Future<void> registerComplaint(int roomId, String complaintMessage) async {
-    setLoading(true);
-    await ApiService.registerComplaint(roomId, complaintMessage);
+    final token = await storage.read(key: 'token');
+    _isLoading = true;
+
+    final body = <String, dynamic>{
+      'room_id': roomId,
+      'complaint_message': complaintMessage
+    };
+    try {
+      await _retrofitService.registerComplaint('Bearer $token', body);
+    } on DioException catch (e) {
+      if (e.response == null) {
+        print("Request failed with status code: ${e.response!.statusCode}");
+      } else {
+        print("Network Error : $e}");
+      }
+    }
+
     fetchComplaints();
     notifyListeners();
-    setLoading(false);
+    _isLoading = false;
   }
 }

@@ -42,11 +42,8 @@ class AlarmProvider with ChangeNotifier {
     setLoading(true);
     int readId = await _retrofitService.readAlarm('Bearer $token', id);
 
-    // Alarm readAlarm = _alarmList.firstWhere((alarm) => alarm.id == id);
-    // readAlarm.read();
     fetchAlarms();
     setLoading(false);
-    // notifyListeners();
     hasUnreadAlarm();
     return readId;
   }

@@ -4,12 +4,6 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
-import 'package:office_user/models/alarm_model.dart';
-import 'package:office_user/models/auth_member_model.dart';
-import 'package:office_user/models/complaint_model.dart';
-import 'package:office_user/models/contract_model.dart';
-import 'package:office_user/models/score_model.dart';
-import 'package:office_user/models/tenant_model.dart';
 
 import '../models/member_model.dart';
 
@@ -21,15 +15,17 @@ class ApiService {
 
   // static String base_url = "https://officeback.site";
   static const String login_url = "public-api/sign-in/user";
+
   // static const String tenant_list = "public-api/tenants";
   static const String join_url = "public-api/sign-up/user";
+
   // static const String my_info_url = "app/members/info";
   // static const String contract_list = "app/contracts";
   // static const String score_list = "app/scores";
   // static const String member_list = "app/members/all";
   // static const String submit_score = "api/scores";
   // static const String alarm_list = "app/alarms";
-  static const String complaint_url = "app/complaints";
+  // static const String complaint_url = "app/complaints";
 
   // static Future<bool> hasNewAlarm() async {
   //   final token = await storage.read(key: 'token');
@@ -44,35 +40,35 @@ class ApiService {
   //   return response.statusCode == 200 && response.body.toLowerCase() == 'true';
   // }
 
-  static Future<List<Complaint>> getComplaintList() async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$complaint_url");
-    final response = await get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    List<dynamic> list = json.decode(utf8.decode(response.bodyBytes));
-    return list.map((complaint) => Complaint.fromJson(complaint)).toList();
-  }
-
-  static Future<bool> registerComplaint(
-      int roomId, String complaintMessage) async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$complaint_url");
-    final response = await post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: json
-          .encode({'room_id': roomId, 'complaint_message': complaintMessage}),
-    );
-    return response.statusCode == 200;
-  }
+  // static Future<List<Complaint>> getComplaintList() async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$complaint_url");
+  //   final response = await get(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   List<dynamic> list = json.decode(utf8.decode(response.bodyBytes));
+  //   return list.map((complaint) => Complaint.fromJson(complaint)).toList();
+  // }
+  //
+  // static Future<bool> registerComplaint(
+  //     int roomId, String complaintMessage) async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$complaint_url");
+  //   final response = await post(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //     body: json
+  //         .encode({'room_id': roomId, 'complaint_message': complaintMessage}),
+  //   );
+  //   return response.statusCode == 200;
+  // }
 
   // static Future<bool> readAlarm(int id) async {
   //   final token = await storage.read(key: 'token');

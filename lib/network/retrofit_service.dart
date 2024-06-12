@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:office_user/models/alarm_model.dart';
+import 'package:office_user/models/complaint_model.dart';
 import 'package:office_user/models/score_model.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -58,6 +59,17 @@ abstract class RetrofitService {
 
   @GET("/app/alarms/is-new")
   Future<bool> hasNewAlarm(
+    @Header("Authorization") String token,
+  );
+
+  @POST("/app/complaints")
+  Future<void> registerComplaint(
+    @Header("Authorization") String token,
+    @Body() Map<String, dynamic> complaintRequest,
+  );
+
+  @GET("/app/complaints")
+  Future<List<Complaint>> getComplaintList(
     @Header("Authorization") String token,
   );
 }
