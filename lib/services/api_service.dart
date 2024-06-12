@@ -145,18 +145,18 @@ class ApiService {
   //   return list.map((score) => Score.fromJson(score)).toList();
   // }
 
-  static Future<ContractList> getContractList() async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$contract_list");
-    final response = await get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    return ContractList.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-  }
+  // static Future<ContractList> getContractList() async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$contract_list");
+  //   final response = await get(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   return ContractList.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+  // }
 
   static Future<AuthMember> getMemberInfo() async {
     final token = await storage.read(key: 'token');

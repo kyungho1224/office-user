@@ -17,7 +17,6 @@ class ScoreProvider with ChangeNotifier {
   bool _isLoading = false;
 
   List<Score> get scoreList => _scoreList;
-
   bool get isLoading => _isLoading;
 
   void setLoading(bool loading) {
