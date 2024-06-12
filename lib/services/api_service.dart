@@ -28,21 +28,21 @@ class ApiService {
   // static const String score_list = "app/scores";
   // static const String member_list = "app/members/all";
   // static const String submit_score = "api/scores";
-  static const String alarm_list = "app/alarms";
+  // static const String alarm_list = "app/alarms";
   static const String complaint_url = "app/complaints";
 
-  static Future<bool> hasNewAlarm() async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$alarm_list/is-new");
-    final response = await get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    return response.statusCode == 200 && response.body.toLowerCase() == 'true';
-  }
+  // static Future<bool> hasNewAlarm() async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$alarm_list/is-new");
+  //   final response = await get(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   return response.statusCode == 200 && response.body.toLowerCase() == 'true';
+  // }
 
   static Future<List<Complaint>> getComplaintList() async {
     final token = await storage.read(key: 'token');
@@ -74,32 +74,32 @@ class ApiService {
     return response.statusCode == 200;
   }
 
-  static Future<bool> readAlarm(int id) async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$alarm_list/$id");
-    final response = await patch(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    return response.statusCode == 200;
-  }
-
-  static Future<List<Alarm>> getAlarmList() async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$alarm_list");
-    final response = await get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    List<dynamic> list = json.decode(utf8.decode(response.bodyBytes));
-    return list.map((alarm) => Alarm.fromJson(alarm)).toList();
-  }
+  // static Future<bool> readAlarm(int id) async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$alarm_list/$id");
+  //   final response = await patch(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   return response.statusCode == 200;
+  // }
+  //
+  // static Future<List<Alarm>> getAlarmList() async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$alarm_list");
+  //   final response = await get(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   List<dynamic> list = json.decode(utf8.decode(response.bodyBytes));
+  //   return list.map((alarm) => Alarm.fromJson(alarm)).toList();
+  // }
 
   // static Future<bool> sendScore(int id, int score, String comment) async {
   //   final token = await storage.read(key: 'token');

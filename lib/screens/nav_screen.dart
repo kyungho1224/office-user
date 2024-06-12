@@ -12,16 +12,46 @@ class NavScreen extends StatefulWidget {
   State<NavScreen> createState() => _NavScreenState();
 }
 
-class _NavScreenState extends State<NavScreen> {
+class _NavScreenState extends State<NavScreen> with WidgetsBindingObserver {
   late int index;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
     index = 0;
     final alarmProvider = Provider.of<AlarmProvider>(context, listen: false);
     alarmProvider.fetchAlarms();
     alarmProvider.hasUnreadAlarm();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        final alarmProvider = Provider.of<AlarmProvider>(context, listen: false);
+        alarmProvider.hasUnreadAlarm();
+        print('resume');
+        break;
+      case AppLifecycleState.detached:
+        print('detached');
+        break;
+      case AppLifecycleState.inactive:
+        print('inactive');
+        break;
+      case AppLifecycleState.hidden:
+        print('hidden');
+        break;
+      case AppLifecycleState.paused:
+        print('paused');
+        break;
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -69,7 +99,13 @@ class _NavScreenState extends State<NavScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
-        onTap: (newIndex) => setState(() => index = newIndex),
+        onTap: (newIndex) => {
+          setState(() {
+            index = newIndex;
+            final alarmProvider = Provider.of<AlarmProvider>(context, listen: false);
+            alarmProvider.hasUnreadAlarm();
+          })
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

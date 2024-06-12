@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:office_user/models/alarm_model.dart';
 import 'package:office_user/models/score_model.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
@@ -41,6 +42,22 @@ abstract class RetrofitService {
 
   @GET("/app/members/all")
   Future<List<AuthMember>> getMemberList(
+    @Header("Authorization") String token,
+  );
+
+  @GET("/app/alarms")
+  Future<List<Alarm>> getAlarmList(
+    @Header("Authorization") String token,
+  );
+
+  @PATCH("/app/alarms/{id}")
+  Future<int> readAlarm(
+    @Header("Authorization") String token,
+    @Path('id') int id,
+  );
+
+  @GET("/app/alarms/is-new")
+  Future<bool> hasNewAlarm(
     @Header("Authorization") String token,
   );
 }

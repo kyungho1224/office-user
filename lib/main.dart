@@ -7,7 +7,7 @@ import 'package:office_user/providers/tenant_provider.dart';
 import 'package:office_user/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/score_provider.dart';
+import 'providers/score_provider.dart';
 
 void main() {
   runApp(
