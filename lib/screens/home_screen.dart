@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:office_user/models/score_model.dart';
 import 'package:office_user/providers/auth_member_provider.dart';
@@ -7,11 +5,8 @@ import 'package:office_user/providers/contract_provider.dart';
 import 'package:office_user/providers/score_provider.dart';
 import 'package:office_user/screens/s_contract_detail.dart';
 import 'package:office_user/screens/s_score_detail.dart';
-import 'package:office_user/services/api_service.dart';
 import 'package:office_user/widgets/w_score_item.dart';
 import 'package:provider/provider.dart';
-
-import '../models/auth_member_model.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -22,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // Future<AuthMember> authMember = ApiService.getMemberInfo();
-  Future<List<AuthMember>> memberList = ApiService.getMemberList();
+  // Future<List<AuthMember>> memberList = ApiService.getMemberList();
 
   @override
   void initState() {
@@ -30,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final authMemberProvider =
         Provider.of<AuthMemberProvider>(context, listen: false);
     authMemberProvider.fetchMember();
+    // authMemberProvider.fetchMemberList();
     final scoreProvider = Provider.of<ScoreProvider>(context, listen: false);
     scoreProvider.fetchScores();
     final contractProvider =
@@ -200,47 +196,54 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Expanded(
-          child: FutureBuilder(
-            future: memberList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return PageView.builder(
-                  controller: PageController(
-                    initialPage: 0,
-                    viewportFraction: 0.95,
-                  ),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(Icons.email_outlined),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(snapshot.data![index].email)
-                              ],
-                            ),
-                            Row(children: [
-                              const Icon(Icons.phone_android_outlined),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(snapshot.data![index].phone)
-                            ])
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+          child: Consumer<AuthMemberProvider>(
+            builder: (context, authMemberProvider, child) {
+              if (authMemberProvider.isLoading) {
+                return Center(
+                  child: CircularProgressIndicator(),
                 );
               }
-              return const CircularProgressIndicator();
+              return authMemberProvider.memberList.isEmpty
+                  ? Center(
+                      child: Text('???'),
+                    )
+                  : PageView.builder(
+                      controller: PageController(
+                        initialPage: 0,
+                        viewportFraction: 0.95,
+                      ),
+                      itemCount: authMemberProvider.memberList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(Icons.email_outlined),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(authMemberProvider
+                                        .memberList[index].email)
+                                  ],
+                                ),
+                                Row(children: [
+                                  const Icon(Icons.phone_android_outlined),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(authMemberProvider
+                                      .memberList[index].phone)
+                                ])
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
             },
           ),
         ),

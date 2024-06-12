@@ -38,4 +38,9 @@ abstract class RetrofitService {
   Future<AuthMember> getMemberInfo(
     @Header("Authorization") String token,
   );
+
+  @GET("/app/members/all")
+  Future<List<AuthMember>> getMemberList(
+    @Header("Authorization") String token,
+  );
 }
