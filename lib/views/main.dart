@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:office_user/providers/alarm_provider.dart';
+import 'package:office_user/providers/auth_member_provider.dart';
 import 'package:office_user/providers/complaint_provider.dart';
 import 'package:office_user/providers/contract_provider.dart';
 import 'package:office_user/providers/tenant_provider.dart';
@@ -26,6 +27,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => TenantProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AuthMemberProvider(),
         ),
       ],
       child: MaterialApp(

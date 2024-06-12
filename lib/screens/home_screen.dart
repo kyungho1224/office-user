@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:office_user/models/score_model.dart';
+import 'package:office_user/providers/auth_member_provider.dart';
 import 'package:office_user/providers/contract_provider.dart';
 import 'package:office_user/providers/score_provider.dart';
 import 'package:office_user/screens/s_contract_detail.dart';
@@ -20,12 +21,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<AuthMember> authMember = ApiService.getMemberInfo();
+  // Future<AuthMember> authMember = ApiService.getMemberInfo();
   Future<List<AuthMember>> memberList = ApiService.getMemberList();
 
   @override
   void initState() {
     super.initState();
+    final authMemberProvider =
+        Provider.of<AuthMemberProvider>(context, listen: false);
+    authMemberProvider.fetchMember();
     final scoreProvider = Provider.of<ScoreProvider>(context, listen: false);
     scoreProvider.fetchScores();
     final contractProvider =
@@ -255,10 +259,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Expanded(
-            child: FutureBuilder(
-          future: authMember,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
+          child: Consumer<AuthMemberProvider>(
+            builder: (context, authMemberProvider, child) {
+              if (authMemberProvider.isLoading) {
+                return CircularProgressIndicator();
+              }
               return Card(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -271,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(snapshot.data!.email),
+                          Text(authMemberProvider.authMember.email),
                         ],
                       ),
                       Row(
@@ -280,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(snapshot.data!.phone)
+                          Text(authMemberProvider.authMember.phone)
                         ],
                       ),
                       Row(
@@ -289,17 +294,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(
                             width: 10,
                           ),
-                          Text(snapshot.data!.tenant.name)
+                          Text(authMemberProvider.authMember.tenant?.name ??
+                              '소속 중인 입주사가 없습니다')
                         ],
                       ),
                     ],
                   ),
                 ),
               );
-            }
-            return const CircularProgressIndicator();
-          },
-        )),
+            },
+          ),
+        ),
       ],
     );
 

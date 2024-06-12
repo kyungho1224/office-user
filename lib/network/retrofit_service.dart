@@ -3,6 +3,7 @@ import 'package:office_user/models/score_model.dart';
 import 'package:retrofit/http.dart';
 import 'package:retrofit/retrofit.dart';
 
+import '../models/auth_member_model.dart';
 import '../models/contract_model.dart';
 import '../models/tenant_model.dart';
 
@@ -30,6 +31,11 @@ abstract class RetrofitService {
 
   @GET("/app/contracts")
   Future<ContractList> getContractList(
+    @Header("Authorization") String token,
+  );
+
+  @GET("/app/members/info")
+  Future<AuthMember> getMemberInfo(
     @Header("Authorization") String token,
   );
 }

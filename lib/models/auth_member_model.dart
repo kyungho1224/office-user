@@ -4,7 +4,7 @@ class AuthMember {
   final int id;
   final String email;
   final String phone;
-  final Tenant tenant;
+  final Tenant? tenant;
 
   AuthMember(
       {required this.id,

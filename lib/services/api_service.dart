@@ -23,8 +23,8 @@ class ApiService {
   static const String login_url = "public-api/sign-in/user";
   // static const String tenant_list = "public-api/tenants";
   static const String join_url = "public-api/sign-up/user";
-  static const String my_info_url = "app/members/info";
-  static const String contract_list = "app/contracts";
+  // static const String my_info_url = "app/members/info";
+  // static const String contract_list = "app/contracts";
   // static const String score_list = "app/scores";
   static const String member_list = "app/members/all";
   // static const String submit_score = "api/scores";
@@ -158,18 +158,18 @@ class ApiService {
   //   return ContractList.fromJson(json.decode(utf8.decode(response.bodyBytes)));
   // }
 
-  static Future<AuthMember> getMemberInfo() async {
-    final token = await storage.read(key: 'token');
-    Uri url = Uri.parse("$base_url/$my_info_url");
-    final response = await get(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-    );
-    return AuthMember.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-  }
+  // static Future<AuthMember> getMemberInfo() async {
+  //   final token = await storage.read(key: 'token');
+  //   Uri url = Uri.parse("$base_url/$my_info_url");
+  //   final response = await get(
+  //     url,
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json',
+  //       'Authorization': 'Bearer $token',
+  //     },
+  //   );
+  //   return AuthMember.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+  // }
 
   static Future<MemberLoginResponse> getMemberLoginResponse(
       String email, String password) async {
