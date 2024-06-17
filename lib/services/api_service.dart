@@ -17,7 +17,7 @@ class ApiService {
   // static const String login_url = "public-api/sign-in/user";
 
   // static const String tenant_list = "public-api/tenants";
-  static const String join_url = "public-api/sign-up/user";
+  // static const String join_url = "public-api/sign-up/user";
 
   // static const String my_info_url = "app/members/info";
   // static const String contract_list = "app/contracts";
@@ -187,22 +187,22 @@ class ApiService {
   //   return MemberLoginResponse.of(response.statusCode, response.body, null);
   // }
 
-  static Future<MemberRegisterResponse> getMemberJoinResponse(
-      String email, String password, String phoneNumber, int tenantId) async {
-    Uri url = Uri.parse("$base_url/$join_url");
-    final response = await post(url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'email': email,
-          'password': password,
-          'phone_number': phoneNumber,
-          'tenant_id': tenantId
-        }));
-    if (response.statusCode == 200) {
-      return MemberRegisterResponse.fromJson(response.statusCode, "success",
-          json.decode(utf8.decode(response.bodyBytes)));
-    }
-    return MemberRegisterResponse.fromJson(
-        response.statusCode, response.body, null);
-  }
+  // static Future<MemberRegisterResponse> getMemberJoinResponse(
+  //     String email, String password, String phoneNumber, int tenantId) async {
+  //   Uri url = Uri.parse("$base_url/$join_url");
+  //   final response = await post(url,
+  //       headers: {'Content-Type': 'application/json'},
+  //       body: json.encode({
+  //         'email': email,
+  //         'password': password,
+  //         'phone_number': phoneNumber,
+  //         'tenant_id': tenantId
+  //       }));
+  //   if (response.statusCode == 200) {
+  //     return MemberRegisterResponse.fromJson(response.statusCode, "success",
+  //         json.decode(utf8.decode(response.bodyBytes)));
+  //   }
+  //   return MemberRegisterResponse.fromJson(
+  //       response.statusCode, response.body, null);
+  // }
 }

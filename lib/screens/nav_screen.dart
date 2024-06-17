@@ -111,10 +111,10 @@ class _NavScreenState extends State<NavScreen> with WidgetsBindingObserver {
             icon: Icon(Icons.home),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.search),
+          //   label: 'Search',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.announcement_outlined),
             label: 'Complaint',

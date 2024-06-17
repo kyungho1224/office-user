@@ -28,12 +28,12 @@ class MemberRegister {
         status = json['status'];
 }
 
-class MemberRegisterResponse {
-  final int code;
-  final String message;
-  final MemberRegister? memberRegister;
-
-  MemberRegisterResponse.fromJson(
-      this.code, this.message, Map<String, dynamic>? json)
-      : memberRegister = json != null ? MemberRegister.fromJson(json) : null;
-}
+// class MemberRegisterResponse {
+//   final int code;
+//   final String message;
+//   final MemberRegister? memberRegister;
+//
+//   MemberRegisterResponse.fromJson(
+//       this.code, this.message, Map<String, dynamic>? json)
+//       : memberRegister = json != null ? MemberRegister.fromJson(json) : null;
+// }

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:office_user/models/member_model.dart';
 import 'package:office_user/models/tenant_model.dart';
@@ -5,6 +6,8 @@ import 'package:office_user/providers/tenant_provider.dart';
 import 'package:office_user/services/api_service.dart';
 import 'package:office_user/widgets/custom_alert_dialog.dart';
 import 'package:provider/provider.dart';
+
+import '../network/retrofit_service.dart';
 
 class JoinScreen extends StatefulWidget {
   JoinScreen({super.key});
@@ -19,7 +22,9 @@ class _JoinScreenState extends State<JoinScreen> {
   String _password = "";
   String _phone = "";
   Tenant? _selectedTenant;
-  late MemberRegisterResponse memberJoinResponse;
+  late MemberRegister joinMember;
+
+  final RetrofitService _retrofitService = RetrofitService(Dio());
 
   void _join() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -32,12 +37,16 @@ class _JoinScreenState extends State<JoinScreen> {
         );
         return;
       }
-      memberJoinResponse = await ApiService.getMemberJoinResponse(
-          _email, _password, _phone, _selectedTenant!.id!);
-      if (memberJoinResponse.code == 200) {
-        print("success");
-        print("role: ${memberJoinResponse.memberRegister!.role}");
-        print("status: ${memberJoinResponse.memberRegister!.status}");
+      // memberJoinResponse = await ApiService.getMemberJoinResponse(
+      //     _email, _password, _phone, _selectedTenant!.id!);
+
+      try {
+        joinMember = await _retrofitService.registerMember(<String, dynamic>{
+          'email': _email,
+          'password': _password,
+          'phone_number': _phone,
+          'tenant_id': _selectedTenant!.id
+        });
         showCustomDialog(
             context: context,
             title: "회원가입 성공",
@@ -51,14 +60,23 @@ class _JoinScreenState extends State<JoinScreen> {
                 child: const Text("확인"),
               )
             ]);
-      } else {
-        print("failed");
+      } on DioException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(memberJoinResponse.message),
+            content: Text(e.response?.statusCode as String),
           ),
         );
       }
+
+      // if (memberJoinResponse.code == 200) {
+      //   print("success");
+      //   print("role: ${memberJoinResponse.memberRegister!.role}");
+      //   print("status: ${memberJoinResponse.memberRegister!.status}");
+      //
+      // } else {
+      //   print("failed");
+      //
+      // }
     }
   }
 

@@ -12,9 +12,10 @@ class NavBody extends StatelessWidget {
   Widget build(BuildContext context) {
     if (index == 0) {
       return HomeScreen();
-    } else if (index == 1) {
-      return const SearchScreen();
     }
+    // else if (index == 1) {
+    //   return const SearchScreen();
+    // }
     return const ComplaintScreen();
   }
 }

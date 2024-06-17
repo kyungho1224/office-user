@@ -32,6 +32,7 @@ class Score {
       : id = json['id'],
         score = json['score'],
         comment = json['comment'],
+        // ratingType = typeFromString(json['rating_type']),
         ratingType = typeFromString(json['rating_type']),
         createdAt = DateTime.parse(json['created_at']),
         updatedAt = DateTime.parse(json['updated_at']);

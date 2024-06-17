@@ -14,6 +14,7 @@ part 'retrofit_service.g.dart';
 
 // @RestApi(baseUrl: "https://officeback.site")
 @RestApi(baseUrl: "http://10.0.2.2:8080")
+// @RestApi(baseUrl: "http://localhost:8080")
 abstract class RetrofitService {
   factory RetrofitService(Dio dio, {String baseUrl}) = _RetrofitService;
 
@@ -75,5 +76,12 @@ abstract class RetrofitService {
   );
 
   @POST("/public-api/sign-in/user")
-  Future<Member> loginMember(@Body() Map<String, dynamic> loginRequest);
+  Future<Member> loginMember(
+    @Body() Map<String, dynamic> loginRequest,
+  );
+
+  @POST("/public-api/sign-up/user")
+  Future<MemberRegister> registerMember(
+    @Body() Map<String, dynamic> joinRequest,
+  );
 }
